@@ -55,9 +55,25 @@ module.exports = function (grunt) {
         ],
         tasks: ['express:dev', 'wait'],
         options: {
-          livereload: true,
+          livereload: 35730,
           nospawn: true //Without this option specified express won't be reloaded
         }
+      }
+    },
+
+    jsbeautifier: {
+      modify: {
+        src: ['server/**/*.js'],
+        options: {
+          config: '.jsbeautifyrc',
+        },
+      },
+      verify: {
+        src: ['server/**/*.js'],
+        options: {
+          mode: 'VERIFY_ONLY',
+          config: '.jsbeautifyrc',
+        },
       }
     },
 
@@ -213,7 +229,8 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'env:all',
         'env:test',
-        'mochaTest'
+        'mochaTest',
+        'jsbeautifier:verify'
       ]);
     }
 
@@ -230,6 +247,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'newer:jshint',
     'test',
+    'jsbeautifier:modify',
     'build'
   ]);
 };
